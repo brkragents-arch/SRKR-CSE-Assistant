@@ -10,7 +10,7 @@ const htmlContent = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SRKR Engineering College - CSE Department Portal</title>
-  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="icon" type="image/png" href="./logo.png">
   <style>
     :root {
       --primary: #003366;
@@ -340,7 +340,7 @@ const htmlContent = `<!DOCTYPE html>
   <header>
     <div class="header-container">
       <div style="display: flex; align-items: center; gap: 12px;">
-        <img src="/logo.png" alt="SRKREC CSE Logo" style="height: 38px; width: 38px; border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,0.2); background: white; padding: 1px;">
+        <img src="./logo.png" alt="SRKREC CSE Logo" style="height: 38px; width: 38px; border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,0.2); background: white; padding: 1px;">
         <div class="title-group">
           <h1>S.R.K.R. Engineering College (Autonomous)</h1>
           <p>Department of Computer Science & Engineering - Academic Portal</p>
