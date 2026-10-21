@@ -57,13 +57,34 @@ Outputs:
 - `publications_annual_report.md`
 - `cse_publications_registry.json`
 
-### 3. Running the Department Portal
+### 3. Running the Department Portal Locally
 Navigate to the portal directory and launch the server:
 ```bash
-cd srkr_cse_workspace/portal
-node server.js
+npm start
+# or
+node srkr_cse_workspace/portal/server.js
 ```
-Open your browser and navigate to `http://localhost:3000`.
+Open your browser and navigate to `http://localhost:5000`.
+
+---
+
+## 🌐 Production Deployment
+
+### Option 1: GitHub Pages (Automatic CI/CD)
+The portal is pre-configured with a GitHub Actions workflow (`.github/workflows/deploy.yml`):
+1. In your GitHub repository, navigate to **Settings** > **Pages**.
+2. Under **Build and deployment** > **Source**, choose **GitHub Actions**.
+3. Any push to `main` will automatically deploy the site to:
+   `https://brkragents-arch.github.io/SRKR-CSE-Assistant/`
+
+### Option 2: Cloud / Container Deployment (Render / Railway / AWS / Docker)
+A production `Dockerfile` and `Procfile` are included:
+```bash
+# Build & run Docker container
+docker build -t srkr-cse-assistant .
+docker run -p 5000:5000 srkr-cse-assistant
+```
+The server reads `process.env.PORT` automatically when deployed on cloud providers.
 
 ---
 

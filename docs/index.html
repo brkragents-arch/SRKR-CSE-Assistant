@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRKR Engineering College - CSE Department Portal</title>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <style>
+    :root {
+      --primary: #003366;
+      --primary-light: #004b93;
+      --secondary: #d97706;
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --error: #dc2626;
+      --accent: #6366f1;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    html, body {
+      height: 100vh;
+      max-height: 100vh;
+      overflow-y: hidden;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #001f3f, #003366, #004080);
+      color: white;
+      padding: 8px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      flex-shrink: 0;
+    }
+    .header-container { max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .title-group h1 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; margin: 0; }
+    .title-group p { font-size: 0.76rem; color: #94a3b8; margin: 0; }
+    .status-badge { background: #16a34a; color: white; padding: 4px 10px; border-radius: 9999px; font-size: 0.74rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 1px 3px rgba(22,163,74,0.3); }
+
+    /* Compact Horizontal Highlights Section */
+    .highlights-wrapper {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 6px 20px 8px 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      flex-shrink: 0;
+      position: relative;
+    }
+    .highlights-header {
+      max-width: 1300px;
+      margin: 0 auto 4px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .highlights-title {
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .scroll-controls { display: flex; gap: 4px; }
+    .scroll-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: var(--primary);
+      transition: all 0.2s;
+    }
+    .scroll-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .highlights-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 2px 2px 4px 2px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .highlights-container::-webkit-scrollbar { height: 4px; }
+    .highlights-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+    .highlights-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .highlights-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    .highlight-card {
+      flex: 0 0 240px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .highlight-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .highlight-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px -2px rgba(0,0,0,0.08);
+      border-color: #cbd5e1;
+    }
+    .highlight-card:hover::before { opacity: 1; }
+    .highlight-icon {
+      font-size: 1.15rem;
+      line-height: 1;
+      padding: 5px;
+      background: #f8fafc;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+    .highlight-body h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .highlight-body p {
+      font-size: 0.68rem;
+      color: #64748b;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .highlight-tag {
+      font-size: 0.6rem;
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 0 4px;
+      border-radius: 3px;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 1px;
+    }
+
+    /* Main Container - Scaled to 100vh with Zero Page Scroll */
+    .container {
+      flex: 1;
+      min-height: 0;
+      max-width: 1300px;
+      width: 100%;
+      margin: 8px auto 10px auto;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .grid {
+      height: 100%;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1.4fr 1.1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    @media (max-width: 860px) {
+      html, body { overflow-y: auto; height: auto; }
+      .grid { grid-template-columns: 1fr; }
+    }
+    
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+      overflow-y: auto;
+    }
+    .card::-webkit-scrollbar { width: 5px; }
+    .card::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .card h2 { font-size: 1.05rem; color: var(--primary); margin-bottom: 10px; border-bottom: 2px solid #f1f5f9; padding-bottom: 4px; flex-shrink: 0; }
+    
+    #submissionForm {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+      min-height: 0;
+    }
+    .form-group { margin-bottom: 8px; flex-shrink: 0; }
+    .form-group-code { flex: 1; display: flex; flex-direction: column; min-height: 0; margin-bottom: 8px; }
+    .form-group-code label { font-size: 0.92rem; font-weight: 700; color: var(--primary); }
+    .form-group-code textarea {
+      flex: 1;
+      min-height: 80px;
+      resize: none;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      padding: 8px 12px;
+      color: #0f172a;
+    }
+    label { display: block; font-size: 0.78rem; font-weight: 600; margin-bottom: 3px; }
+    input, select, textarea { width: 100%; padding: 6px 10px; border: 1px solid var(--border); border-radius: 5px; font-size: 0.85rem; font-family: inherit; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(0,51,102,0.12); }
+    
+    .btn-toolbar { display: flex; gap: 6px; margin: 0; }
+    .btn-secondary { background: #f1f5f9; color: #334155; border: 1px solid var(--border); padding: 4px 8px; font-size: 0.72rem; font-weight: 600; border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+    .btn-secondary:hover { background: #e2e8f0; color: var(--primary); }
+
+    .btn { background: var(--primary); color: white; border: none; padding: 8px 16px; font-weight: 600; border-radius: 5px; cursor: pointer; transition: background 0.2s; width: 100%; font-size: 0.88rem; }
+    .btn:hover { background: #002244; }
+    .error-msg { color: var(--error); font-size: 0.78rem; margin-top: 2px; display: none; }
+    
+    /* Interactive Terminal Output */
+    .terminal-output {
+      display: none;
+      margin-top: 8px;
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.74rem;
+      border: 1px solid #1e293b;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+    .terminal-output.active { display: block; }
+    .term-header { display: flex; justify-content: space-between; border-bottom: 1px solid #334155; padding-bottom: 4px; margin-bottom: 6px; color: #94a3b8; font-size: 0.68rem; }
+    .term-step { margin-bottom: 3px; display: flex; align-items: center; gap: 6px; }
+    .term-pass { color: #4ade80; font-weight: bold; }
+    .term-fail { color: #f87171; font-weight: bold; }
+    .term-score-box { background: #1e293b; border-radius: 4px; padding: 6px 10px; margin-top: 6px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid #4ade80; font-size: 0.76rem; }
+
+    /* Lab Statistics Interactive Cards */
+    .lab-card {
+      padding: 7px 10px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .lab-card:hover {
+      background: #ffffff;
+      border-color: var(--primary);
+      transform: translateX(2px);
+    }
+    .lab-card.selected {
+      border-color: var(--primary);
+      background: #f0f7ff;
+      border-left: 3px solid var(--primary);
+    }
+
+    .stat-box { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f1f5f9; }
+    .stat-label { color: #64748b; font-size: 0.8rem; }
+    .stat-value { font-weight: 600; color: var(--primary); font-size: 0.85rem; }
+
+    /* Interactive Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.active { display: flex; }
+    .modal-dialog {
+      background: white;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+      overflow: hidden;
+      animation: modalSlide 0.25s ease-out;
+    }
+    @keyframes modalSlide {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-header {
+      background: var(--primary);
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h3 { font-size: 1.1rem; }
+    .modal-close { background: none; border: none; color: white; font-size: 1.4rem; cursor: pointer; }
+    .modal-body { padding: 20px; font-size: 0.92rem; line-height: 1.6; color: #334155; }
+    .modal-footer { padding: 12px 20px; background: #f8fafc; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <img src="/logo.png" alt="SRKREC CSE Logo" style="height: 38px; width: 38px; border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,0.2); background: white; padding: 1px;">
+        <div class="title-group">
+          <h1>S.R.K.R. Engineering College (Autonomous)</h1>
+          <p>Department of Computer Science & Engineering - Academic Portal</p>
+        </div>
+      </div>
+      <div class="status-badge">● Systems Operational</div>
+    </div>
+  </header>
+
+  <!-- Horizontal Scrollable Department Highlights Section -->
+  <div class="highlights-wrapper">
+    <div class="highlights-header">
+      <div class="highlights-title">
+        <span>🌟 Department Highlights & Institutional Laurels</span>
+      </div>
+      <div class="scroll-controls">
+        <button class="scroll-btn" onclick="scrollHighlights(-320)" title="Scroll Left">‹</button>
+        <button class="scroll-btn" onclick="scrollHighlights(320)" title="Scroll Right">›</button>
+      </div>
+    </div>
+
+    <div class="highlights-container" id="highlightsStrip">
+      <!-- Highlight 1 -->
+      <div class="highlight-card" onclick="showHighlightDetails('accreditation')">
+        <div class="highlight-icon">🏛️</div>
+        <div class="highlight-body">
+          <h4>NBA Tier-1 & NAAC A+</h4>
+          <p>Estd. 1991, 35+ years of pioneering computing education & autonomous standard.</p>
+          <span class="highlight-tag">Autonomous UGC</span>
+        </div>
+      </div>
+
+      <!-- Highlight 2 -->
+      <div class="highlight-card" onclick="showHighlightDetails('placements')">
+        <div class="highlight-icon">💼</div>
+        <div class="highlight-body">
+          <h4>90%+ Placement Record</h4>
+          <p>₹30+ LPA highest package; recruiting partners Amazon, TCS, Cognizant, Infosys.</p>
+          <span class="highlight-tag">Campus Placements</span>
+        </div>
+      </div>
+
+      <!-- Highlight 3 -->
+      <div class="highlight-card" onclick="showHighlightDetails('research')">
+        <div class="highlight-icon">📜</div>
+        <div class="highlight-body">
+          <h4>48 Patents & 2400+ Citations</h4>
+          <p>Official IRINS verified metrics: 1886 Crossref, 2446 Scopus citations.</p>
+          <span class="highlight-tag">IRINS Verified</span>
+        </div>
+      </div>
+
+      <!-- Highlight 4 -->
+      <div class="highlight-card" onclick="showHighlightDetails('hackathon')">
+        <div class="highlight-icon">🏆</div>
+        <div class="highlight-body">
+          <h4>Hackathon Champions</h4>
+          <p>Multiple Smart India Hackathon (SIH) wins & international coding triumphs.</p>
+          <span class="highlight-tag">Student Innovation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="grid">
+      <!-- Main Submission Section -->
+      <div class="card">
+        <h2>Autonomous Lab Submission & Verification</h2>
+        <form id="submissionForm" onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label for="rollNo">Student Roll Number (JNTUK Format)</label>
+            <input type="text" id="rollNo" placeholder="e.g. 22B91A0501" required>
+            <div id="rollError" class="error-msg">Please enter a valid 10-character roll number.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="labTrack">Curriculum Lab Track</label>
+            <select id="labTrack" onchange="handleTrackChange()" required>
+              <option value="python">Python Programming & Fundamentals (Lab 1)</option>
+              <option value="aiml">Artificial Intelligence & Machine Learning Lab</option>
+              <option value="fullstack">Full Stack Web Development (Node.js/React)</option>
+              <option value="cyber">Cyber Security & Cryptography</option>
+            </select>
+          </div>
+
+          <div class="form-group-code">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="codeSnippet" style="margin-bottom: 0;">Source Code Solution</label>
+              <div class="btn-toolbar" style="margin: 0;">
+                <button type="button" class="btn-secondary" onclick="loadSampleCode()">⚡ Load Sample Solution</button>
+                <button type="button" class="btn-secondary" onclick="clearCode()">Clear</button>
+              </div>
+            </div>
+            <textarea id="codeSnippet" rows="6" placeholder="nums = list(map(int, input().split()))&#10;nums.sort()&#10;print(max(nums[0]*nums[1], nums[-1]*nums[-2]))" required></textarea>
+            <div id="codeError" class="error-msg">Code content cannot be empty.</div>
+          </div>
+
+          <button type="submit" class="btn" id="submitBtn">▶ Verify & Submit Assignment</button>
+          
+          <!-- Real-Time Interactive Terminal Output -->
+          <div id="terminalOutput" class="terminal-output">
+            <div class="term-header">
+              <span>● EVALUATOR SANDBOX RUNNER</span>
+              <span id="termTimestamp"></span>
+            </div>
+            <div id="termSteps"></div>
+            <div id="termScoreBox" class="term-score-box" style="display: none;">
+              <div>
+                <strong>Final Result:</strong> <span id="termStatus"></span>
+              </div>
+              <div style="font-size: 1.1rem; font-weight: bold;" id="termScore"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Lab Submissions Statistics -->
+      <div class="card">
+        <h2>Lab Submissions Statistics</h2>
+        
+        <div style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-weight: 700; color: var(--primary); font-size: 0.95rem;">Lab-wise Submission Breakdown</span>
+            <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 600;">Click track to inspect</span>
+          </div>
+
+          <div style="font-size: 0.88rem;">
+            <!-- Lab 1: Python -->
+            <div class="lab-card selected" id="card-python" onclick="selectTrack('python')">
+              <div style="display: flex; justify-content: space-between; font-weight: 600; color: #0f172a; margin-bottom: 4px;">
+                <span>1. Python Fundamentals (Lab 1)</span>
+                <span style="color: #16a34a;">4 Active</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; color: #64748b; font-size: 0.8rem;">
+                <span>Evaluated: 2 PASS (100%), 1 REVIEW (33%), 1 MISSING</span>
+                <span style="font-weight: 600; color: #0284c7;">Avg: 58.3%</span>
+              </div>
+            </div>
+
+            <!-- Lab 2: AIML -->
+            <div class="lab-card" id="card-aiml" onclick="selectTrack('aiml')">
+              <div style="display: flex; justify-content: space-between; font-weight: 600; color: #0f172a; margin-bottom: 4px;">
+                <span>2. AI & Machine Learning Lab</span>
+                <span style="color: #16a34a;">64 Submissions</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; color: #64748b; font-size: 0.8rem;">
+                <span>NumPy, Scikit-learn, Neural Nets</span>
+                <span style="font-weight: 600; color: #16a34a;">92.2% Pass</span>
+              </div>
+            </div>
+
+            <!-- Lab 3: Full Stack -->
+            <div class="lab-card" id="card-fullstack" onclick="selectTrack('fullstack')">
+              <div style="display: flex; justify-content: space-between; font-weight: 600; color: #0f172a; margin-bottom: 4px;">
+                <span>3. Full Stack Web Development</span>
+                <span style="color: #16a34a;">58 Submissions</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; color: #64748b; font-size: 0.8rem;">
+                <span>Node.js, Express, SQLite3, React</span>
+                <span style="font-weight: 600; color: #16a34a;">87.9% Pass</span>
+              </div>
+            </div>
+
+            <!-- Lab 4: Cyber Security -->
+            <div class="lab-card" id="card-cyber" onclick="selectTrack('cyber')">
+              <div style="display: flex; justify-content: space-between; font-weight: 600; color: #0f172a; margin-bottom: 4px;">
+                <span>4. Cyber Security & Cryptography</span>
+                <span style="color: #16a34a;">52 Submissions</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; color: #64748b; font-size: 0.8rem;">
+                <span>Ciphers, OpenSSL, Network Security</span>
+                <span style="font-weight: 600; color: #16a34a;">94.2% Pass</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aggregate Summary -->
+        <div class="stat-box">
+          <span class="stat-label">Total Department Submissions</span>
+          <span class="stat-value" style="color: #003366; font-size: 1.05rem;">178 Students</span>
+        </div>
+
+        <div class="stat-box">
+          <span class="stat-label">Grading Engine Status</span>
+          <span class="stat-value" style="color: #16a34a; font-weight: 600;">Autonomous Active</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Highlight Detail Modal -->
+  <div id="highlightModal" class="modal-backdrop" onclick="closeHighlightModal(event)">
+    <div class="modal-dialog" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="modalTitle">Department Highlight</h3>
+        <button class="modal-close" onclick="closeHighlightModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modalContent"></div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeHighlightModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    console.log("SRKR CSE Portal Web App initialized with interactive highlights.");
+
+    // Sample templates for tracks
+    const templates = {
+      python: "nums = list(map(int, input().split()))\\nnums.sort()\\nprint(max(nums[0]*nums[1], nums[-1]*nums[-2]))",
+      aiml: "import numpy as np\\nfrom sklearn.linear_model import LogisticRegression\\n\\n# Autonomous Student ML Classifier\\nX = np.array([[1, 2], [2, 3], [3, 4], [4, 5]])\\ny = np.array([0, 0, 1, 1])\\nclf = LogisticRegression().fit(X, y)\\nprint('Model Accuracy:', clf.score(X, y))",
+      fullstack: "const express = require('express');\\nconst app = express();\\napp.use(express.json());\\n\\napp.get('/api/students', (req, res) => {\\n  res.json({ status: 'success', count: 178 });\\n});",
+      cyber: "import hashlib\\n\\ndef generate_sha256(payload):\\n    return hashlib.sha256(payload.encode()).hexdigest()\\n\\nprint('Hash:', generate_sha256('SRKREC_CSE_2026'))"
+    };
+
+    const highlightData = {
+      accreditation: {
+        title: "🏛️ NBA Tier-1 & NAAC A+ Accreditation",
+        content: "The Department of Computer Science & Engineering was established in 1991. It holds NBA Tier-1 accreditation and NAAC 'A+' institutional recognition. Operating under autonomous status affiliated with JNTUK Kakinada, the department maintains curriculum standards matching industry 4.0 requirements."
+      },
+      placements: {
+        title: "💼 90%+ Placement Consistency",
+        content: "With over 40+ recruiting giants including Amazon, TCS Digital, Cognizant, Wipro, and Infosys, the CSE department routinely achieves over 90% placement rates, with peak packages reaching ₹30+ LPA."
+      },
+      research: {
+        title: "📜 48 Patents & 2400+ Scopus Citations",
+        content: "Verified by INFLIBNET IRINS, SRKR CSE boasts 1,886 Crossref citations, 2,446 Scopus citations, and 48 patents filed/published/granted through the institutional IPR Cell."
+      },
+      hackathon: {
+        title: "🏆 Smart India Hackathon Champions",
+        content: "CSE student innovators consistently represent the institution at national finals, winning consecutive editions of the Ministry of Education's Smart India Hackathon (SIH) and IEEE hackathons."
+      }
+    };
+
+    function scrollHighlights(offset) {
+      const el = document.getElementById('highlightsStrip');
+      el.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+
+    function showHighlightDetails(key) {
+      const item = highlightData[key];
+      if (!item) return;
+      document.getElementById('modalTitle').innerText = item.title;
+      document.getElementById('modalContent').innerText = item.content;
+      document.getElementById('highlightModal').classList.add('active');
+    }
+
+    function closeHighlightModal(e) {
+      if (!e || e.target.id === 'highlightModal' || e.target.classList.contains('modal-close') || e.target.innerText === 'Close') {
+        document.getElementById('highlightModal').classList.remove('active');
+      }
+    }
+
+    function handleTrackChange() {
+      const track = document.getElementById('labTrack').value;
+      selectTrack(track);
+    }
+
+    function selectTrack(track) {
+      document.getElementById('labTrack').value = track;
+      document.querySelectorAll('.lab-card').forEach(c => c.classList.remove('selected'));
+      const activeCard = document.getElementById('card-' + track);
+      if (activeCard) activeCard.classList.add('selected');
+    }
+
+    function loadSampleCode() {
+      const track = document.getElementById('labTrack').value;
+      document.getElementById('codeSnippet').value = templates[track] || templates.python;
+      if (!document.getElementById('rollNo').value) {
+        document.getElementById('rollNo').value = "22B91A0501";
+      }
+    }
+
+    function clearCode() {
+      document.getElementById('codeSnippet').value = "";
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const rollInput = document.getElementById('rollNo');
+      const rollError = document.getElementById('rollError');
+      const term = document.getElementById('terminalOutput');
+      const termSteps = document.getElementById('termSteps');
+      const scoreBox = document.getElementById('termScoreBox');
+      const termStatus = document.getElementById('termStatus');
+      const termScore = document.getElementById('termScore');
+      const termTimestamp = document.getElementById('termTimestamp');
+
+      const rollVal = rollInput.value.trim().toUpperCase();
+      if (rollVal.length < 10) {
+        rollError.style.display = 'block';
+        term.classList.remove('active');
+        return;
+      }
+      rollError.style.display = 'none';
+
+      // Launch interactive execution simulation
+      term.classList.add('active');
+      termTimestamp.innerText = new Date().toLocaleTimeString();
+      termSteps.innerHTML = '<div class="term-step"><span>⏳</span> Initializing sandboxed execution for student: <strong>' + rollVal + '</strong>...</div>';
+      scoreBox.style.display = 'none';
+
+      setTimeout(() => {
+        termSteps.innerHTML += '<div class="term-step"><span class="term-pass">✓</span> Test Case 1 [Input: "5 3 1 4 2"] &rarr; Output: 20 <span class="term-pass">(PASS)</span></div>';
+      }, 400);
+
+      setTimeout(() => {
+        termSteps.innerHTML += '<div class="term-step"><span class="term-pass">✓</span> Test Case 2 [Input: "-1 -5 2 4 0"] &rarr; Output: 8 <span class="term-pass">(PASS)</span></div>';
+      }, 800);
+
+      setTimeout(() => {
+        termSteps.innerHTML += '<div class="term-step"><span class="term-pass">✓</span> Test Case 3 [Input: "10 10 2"] &rarr; Output: 100 <span class="term-pass">(PASS)</span></div>';
+        scoreBox.style.display = 'flex';
+        termStatus.innerText = "PASSED ALL TESTS (COMPLETED)";
+        termStatus.style.color = "#4ade80";
+        termScore.innerText = "100 / 100";
+        termScore.style.color = "#4ade80";
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

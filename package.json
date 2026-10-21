@@ -1,0 +1,23 @@
+{
+  "name": "srkr-cse-assistant",
+  "version": "1.0.0",
+  "description": "SRKR Engineering College - CSE Department Portal & Assistant",
+  "main": "srkr_cse_workspace/portal/server.js",
+  "scripts": {
+    "start": "node srkr_cse_workspace/portal/server.js",
+    "portal": "node srkr_cse_workspace/portal/server.js",
+    "grade": "python grader.py",
+    "compile-publications": "python compile_records.py"
+  },
+  "keywords": [
+    "srkr",
+    "cse",
+    "academic-portal",
+    "assistant"
+  ],
+  "author": "SRKR CSE Department",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
